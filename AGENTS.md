@@ -11,3 +11,7 @@ Using the default triage labels (`needs-triage`, `needs-info`, `ready-for-agent`
 ### Domain docs
 
 Single-context layout (root `CONTEXT.md` + `docs/adr/`). See `docs/agents/domain.md`.
+
+### Git workflow
+
+Work in one lane: primary (`main`), scoped (`NN-<slug>` per issue), or personal (`personal/<user>/<topic>`, local-only). Show diff + message and wait for Yes before every commit; commit approval on a pre-authorized scoped branch carries push approval; `personal/*` is never pushed. See `docs/agents/git-workflow.md`.
