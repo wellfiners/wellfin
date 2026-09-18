@@ -1,5 +1,0 @@
-interface:
-  display_name: "Daily"
-  short_description: "Morning brief and evening wrap-up across workstreams"
-policy:
-  allow_implicit_invocation: false
