@@ -41,6 +41,13 @@ For every commit, on any lane:
 - Commit approval on a pre-authorized scoped branch carries push approval for that branch: push it upstream without a second prompt so review can happen.
 - Push nothing else on that approval: `personal/*` is never pushed under any approval, and `main` is never direct-pushed (open a PR from the scoped branch instead).
 
+## Landing PRs
+
+- Land every PR with a squash merge (`gh pr merge --squash`): one commit per PR on `main`.
+- Squash message follows the commit rule above: conventional-commit subject, body for what/why, footer `Part of #NN` (or `Closes #NN` when the PR finishes its issue). One ticket per squash.
+- Stacked PRs land bottom-up: squash the base first, then transplant the child with `git rebase --onto <new-main> <old-base> <child-branch>`, retarget its base to `main`, and squash it. Never squash a base without transplanting its children.
+- Delete the scoped branch after merge.
+
 ## Personal stays local; findings get promoted
 
 - Keep personal work invisible to the team: no `git push` involving `personal/*`, no PR from it, no issue comment pointing at personal paths. `.scratch/personal/` stays untracked and out of scoped commits.
