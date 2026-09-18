@@ -49,7 +49,7 @@ Three lanes, exactly one at a time: **primary** (`main`, protected), **scoped** 
 - Every commit: the agent stages only the ticket's scope, shows diff plus message, and **waits for your explicit Yes** — on any lane, including `main`, where direct commits additionally need separate primary confirmation.
 - Authorship is human; agent-wholesale content approved unmodified adds `Assisted-by: OpenCode (Muse Spark)`. Real `Co-authored-by` waits for a team bot account — never invent identities.
 - Never commit secrets, `personal/*`, or unrelated scopes together; never `--no-verify`, never amend someone else's commit.
-- Commit approval on a pre-authorized scoped branch carries push approval — push it so review can happen. `personal/*` is never pushed; `main` is never direct-pushed. Land via PR from the scoped branch and delete the branch after merge.
+- Commit approval on a pre-authorized scoped branch carries push approval — push it so review can happen. `personal/*` is never pushed; `main` is never direct-pushed. Land via squash-merge PR from the scoped branch and delete the branch after merge (see `git-workflow.md` § Landing PRs for message shape and stacking).
 
 ## 7. Learning your way up
 
