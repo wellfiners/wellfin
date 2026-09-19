@@ -21,10 +21,12 @@ Three lanes govern every agent git action: **primary** (shared, protected), **sc
 
 ## Commits: show, then wait
 
-For every commit, on any lane:
+For every commit, on any lane except `personal/*`:
 
 1. Stage only the ticket's scope: `git status --short`, plus the full diff of exactly what will be committed.
 2. Present the diff stat, the diff itself (or its path when large), and the proposed message, then wait for an explicit Yes or an edited message.
+
+Commits on `personal/*` are local-only drafts (never pushed, never PR'd): they may be created without waiting for an explicit Yes. Author must still be a team human (`git config user.name` check still applies), hygiene still applies, and promotion to `NN-<slug>` or `main` still requires the Yes gate above.
 3. Message shape: conventional commits — `type(scope): imperative lowercase subject` on line one (e.g. `docs(agents): reserve import_id fields on ledger entries`), body explaining what and why, footer naming `Part of #NN` with the ticket link. One ticket per commit. Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`. Scope is the area touched (`agents`, `api`, `android`, `ledger`, …).
 4. Commit only on the intended branch. On `main` this needs the separate primary confirmation from above; on a scoped branch the earlier branch intent plus this commit confirmation together authorize it.
 5. Commit hygiene: skip nothing via `--no-verify`, amend only your own unpushed commit, stage no secrets (`.env`, tokens), no `personal/*`, no unrelated scopes in one commit.
