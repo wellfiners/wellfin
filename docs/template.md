@@ -1,10 +1,9 @@
-# Project template (bootstrap #21)
+# Project template (bootstrap #21, updater #22)
 
 Canonical template source lives outside this repo (this repo is the lived reference instance, not the template source):
 
 - Template repo: https://github.com/IBruteDude/agentic-project-template (public)
-- Layout in template repo: prose `docs/template/*.tmpl`, runnables `scripts/template/*`, plus `bootstrap.mts`, `TEMPLATE-OWNERSHIP.md`, `TEMPLATE-CHANGELOG.md` at root. Root stays clean.
-- Updater `sync-template.mts` lands in #22.
+- Layout in template repo: prose `docs/template/*.tmpl`, runnables `scripts/template/*`, plus `bootstrap.mts`, `sync-template.mts`, `TEMPLATE-OWNERSHIP.md`, `TEMPLATE-CHANGELOG.md` at root. Root stays clean.
 
 ## Tokens (bootstrap inputs)
 
@@ -28,3 +27,10 @@ Template-owned: `AGENTS.md`, `CONTRIBUTING.md` structure, `docs/agents/`, `.sand
 - Method: scratch clone of template repo, `npx tsx bootstrap.mts --non-interactive --input ...`, then `npx tsx scripts/token-audit.mts`.
 - Result 2026-09-20: rendered 23 files; bootstrap audit 0 token hits, 0 residue hits, 0 schooling hits; `PERSONALIZATION.log.md` present; `bootstrap.mts` + `docs/template/` + `scripts/template/` sources removed (fire-once verified); standalone `scripts/token-audit.mts` PASS (0 tokens, 0 residue, wording clean outside vendored skills).
 - Changelog: template `TEMPLATE-CHANGELOG.md` 0.1.0 (skeleton) + 0.2.0 (provider-neutral model auth + proof + credential answer above).
+
+## Fixture updater round-trip (#22 acceptance)
+
+- Updater: template repo `sync-template.mts` (`--template <repo> --downstream <project> --input <json> [--yes]`). Template-owned renders from `.tmpl` with the same inputs; root meta syncs by copy; `README.md` + `CONTEXT.md` project-owned after bootstrap and never touched; log append-only. Outcomes: `update` / `create` / `skip` / `conflict` (incl. `LOCAL-EDIT` marker even with `--yes`) / `protected`. Changelog printed first for judgment.
+- Method: bootstrap Acme sample from pre-bump, diverge (`CONTRIBUTING.md` LOCAL-EDIT, `CONTEXT.md` glossary term, new inbox note, updater removed), bump rail-fix line in `git-workflow` template + changelog 0.3.0, sync with `--yes --non-interactive`.
+- Result 2026-09-20: `update=2` (`docs/agents/git-workflow.md` with rail fix, `TEMPLATE-CHANGELOG.md` with 0.3.0), `create=1` (`sync-template.mts`), `skip=20` (incl. `AGENTS.md`), `conflict=1` (`CONTRIBUTING.md` LOCAL-EDIT preserved, not overwritten), `protected=3` (`CONTEXT.md` glossary term, `README.md`, log untouched; inbox note preserved). Post-sync `scripts/token-audit.mts` PASS.
+- Changelog: template `TEMPLATE-CHANGELOG.md` 0.3.0 (updater + round-trip above).
