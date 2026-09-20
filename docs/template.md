@@ -1,9 +1,9 @@
-# Project template (bootstrap #21, updater #22)
+# Project template (bootstrap #21, updater #22, adopt #26)
 
 Canonical template source lives outside this repo (this repo is the lived reference instance, not the template source):
 
 - Template repo: https://github.com/IBruteDude/agentic-project-template (public)
-- Layout in template repo: prose `docs/template/*.tmpl`, runnables `scripts/template/*`, plus `bootstrap.mts`, `sync-template.mts`, `TEMPLATE-OWNERSHIP.md`, `TEMPLATE-CHANGELOG.md` at root. Root stays clean.
+- Layout in template repo: prose `docs/template/*.tmpl`, runnables `scripts/template/*`, plus `bootstrap.mts`, `sync-template.mts`, `adopt.mts`, `TEMPLATE-OWNERSHIP.md`, `TEMPLATE-CHANGELOG.md` at root. Root stays clean.
 
 ## Tokens (bootstrap inputs)
 
@@ -19,7 +19,7 @@ Credential-var answer (best-effort, also in template changelog 0.2.0): outside t
 
 ## Ownership (summary; canonical in template repo `TEMPLATE-OWNERSHIP.md`)
 
-Template-owned: `AGENTS.md`, `CONTRIBUTING.md` structure, `docs/agents/`, `.sandcastle/` runner, `package.json`, `skills-lock.json` + skills wiring, inbox `INDEX` structure, `docs/adr/` seed, `scripts/token-audit.mts`, updater. Project-owned (never overwritten): `CONTEXT.md` terms, numbered ADRs, `docs/knowledge/**`, `PERSONALIZATION.log.md`, product code, local-only paths.
+Template-owned: `AGENTS.md`, `CONTRIBUTING.md` structure, `docs/agents/`, `.sandcastle/` runner, `package.json`, `skills-lock.json` + skills wiring, inbox `INDEX` structure, `docs/adr/` seed, `scripts/token-audit.mts`, updater. Project-owned (never overwritten): `CONTEXT.md` terms, `README.md` (both created by adopt only when absent, otherwise always protected), numbered ADRs, `docs/knowledge/**`, `PERSONALIZATION.log.md`, `.template-sync.json` machine record (updater reads, never overwrites), product code, local-only paths.
 
 ## Fixture bootstrap proof (#21 acceptance)
 
@@ -34,3 +34,10 @@ Template-owned: `AGENTS.md`, `CONTRIBUTING.md` structure, `docs/agents/`, `.sand
 - Method: bootstrap Acme sample from pre-bump, diverge (`CONTRIBUTING.md` LOCAL-EDIT, `CONTEXT.md` glossary term, new inbox note, updater removed), bump rail-fix line in `git-workflow` template + changelog 0.3.0, sync with `--yes --non-interactive`.
 - Result 2026-09-20: `update=2` (`docs/agents/git-workflow.md` with rail fix, `TEMPLATE-CHANGELOG.md` with 0.3.0), `create=1` (`sync-template.mts`), `skip=20` (incl. `AGENTS.md`), `conflict=1` (`CONTRIBUTING.md` LOCAL-EDIT preserved, not overwritten), `protected=3` (`CONTEXT.md` glossary term, `README.md`, log untouched; inbox note preserved). Post-sync `scripts/token-audit.mts` PASS.
 - Changelog: template `TEMPLATE-CHANGELOG.md` 0.3.0 (updater + round-trip above).
+
+## Fixture adopt proof (#26 acceptance)
+
+- Adopt: template repo `adopt.mts` (`--template <checkout> --downstream <old-project> --input <json> [--yes] [--non-interactive]`, same shape as the updater). Infer-then-confirm when `--input` is omitted (slug + org from downstream git remote, name from downstream manifest with directory fallback, rest from fixture defaults, every value shown for confirmation). Additive-only: missing template-owned files created; differing files left as `conflict` for an interactive per-file Yes (`--yes` applies only creates + manifest merge + sync record, never overwrites); `README.md` + `CONTEXT.md` always protected (created only when absent, otherwise untouched with no prompt); `package.json` is the sole structural merge (missing scripts/deps added, existing kept, semver-higher-wins with a report line); anything outside the template-owned list never written. Records: human `PERSONALIZATION.log.md` (created when absent, appended when present) + machine `.template-sync.json` (template source, version, inputs; updater prefers it when `--input` is omitted). Reruns are a safe no-op.
+- Method: fixture old project (existing README, glossary `CONTEXT.md`, manifest with custom scripts + express + older tsx, product code `src/app.js`, differing `AGENTS.md` + `.gitignore`, git remote old-org/old-project), adopt with `--yes --non-interactive`, then rerun, then updater without `--input`, then `scripts/token-audit.mts`.
+- Result 2026-09-20: run 1 `create=23` (18 rails + 3 root meta + sync record + log) `conflict=2` (`AGENTS.md`, `.gitignore` left as-is) `protected=2` (README + glossary byte-identical) `merged=1` (manifest: kept test/start/express, added sandcastle/typecheck + runner dep, tsx `^4.0.0` vs `^4.21.0` kept higher); adopt audit 0 tokens, 0 residue, 0 wording hits. Rerun `create=0 update=0 merged=0 skip=23 conflict=2 protected=2` with README/glossary/manifest/product code unchanged. Updater continuity without `--input` reads the sync record: `update=0 create=0 skip=21 conflict=3 protected=3`, manifest preserved. Inference check without `--input` (SSH remote + manifest name): slug/org/name inferred, fixture defaults for the rest. Downstream `scripts/token-audit.mts` PASS. Bootstrap regression on the same checkout: 23 files, 0/0/0, fire-once verified, token-audit PASS (empty-clone path unchanged; bootstrap audit skip list only gains `adopt.mts`, same precedent as `sync-template.mts`).
+- Changelog: template `TEMPLATE-CHANGELOG.md` 0.4.0 (adopt + proof above).
