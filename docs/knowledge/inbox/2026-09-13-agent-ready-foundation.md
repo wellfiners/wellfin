@@ -22,7 +22,7 @@ Question routed: "how to keep a growing fintech concept library without pollutin
 
 Reason: the repo has a working directory, so the stateful interview (`grill-with-docs`) is strictly better than stateless `grill-me`; the problem is fuzzy terminology ("account", "record", "merchant", "plan") which is exactly what `domain-modeling` owns (challenge fuzzy terms, resolve overloads, record hard-to-reverse choices as ADRs, keep `CONTEXT.md` a clean glossary); the output is agent-consumed docs, which is what `writing-for-agents` governs. Source: `.agents/skills/ask-matt/SKILL.md` (main flow step 1, vocabulary-underneath section, standalone definitions).
 
-Practical consequence used below: `CONTEXT.md` stays a small glossary; `docs/learning/` is a staging inbox; `docs/adr/` is the only promotion target for decisions. Nothing learns its way into agent context without passing `domain-modeling`.
+Practical consequence used below: `CONTEXT.md` stays a small glossary; `docs/knowledge/inbox/` is a staging inbox; `docs/adr/` is the only promotion target for decisions. Nothing learns its way into agent context without passing `domain-modeling`.
 
 ## 1. Single-context CONTEXT.md + docs/adr/ hygiene
 
@@ -38,23 +38,23 @@ What belongs where (minimal rule for Wellfin):
 |---|---|---|
 | `CONTEXT.md` | Agreed fintech glossary: term, one-line definition, what it is NOT, V1 scope note. ~50-150 lines. | Tutorials, options considered, math, API shapes, transient notes |
 | `docs/adr/` | Accepted/superseded hard-to-reverse decisions (ledger core, stack picks, mono-repo layout, inference contract). Nygard/MADR shape. | Learning drafts, open questions |
-| `docs/learning/` | Dated concept notes (Diataxis explanation/tutorials). Each has `Status: inbox`, `Expires:` date, `Promotes to:` pointer. | Normative definitions (those live in CONTEXT.md once agreed) |
+| `docs/knowledge/inbox/` | Dated concept notes (Diataxis explanation/tutorials). Each has `Status: inbox`, `Expires:` date, `Promotes to:` pointer. | Normative definitions (those live in CONTEXT.md once agreed) |
 | `AGENTS.md` + nested `apps/*/AGENTS.md` | How to work: commands, test entry, doc pointers, English-only rule. | Domain definitions (point at CONTEXT.md) |
 | `.scratch/wellfin-foundation/` | Wayfinding map + open decision tickets. Interim local tracker until ticket 06 migrates to GitHub Issues. | Anything normative |
 
-Diataxis justification (primary): four needs, four forms — tutorial (learning-oriented lesson), how-to (goal-oriented steps for a competent user), reference (neutral technical description, structured like the machinery), explanation (understanding-oriented, why/background). Sources: `diataxis.fr/` (home), `diataxis.fr/start-here`, `diataxis.fr/map`, `diataxis.fr/reference`, `diataxis.fr/reference-explanation`. Mapping: `CONTEXT.md` ≈ reference (austere glossary); `docs/adr/` ≈ explanation + decision log (why + consequences); `docs/learning/` ≈ tutorial/explanation drafts; `services/api` OpenAPI + `packages/contracts` ≈ reference. Do not mix them: Diataxis warns that blurring tutorial/how-to and reference/explanation breaks both needs — this is the theoretical basis for "do not pollute CONTEXT.md".
+Diataxis justification (primary): four needs, four forms — tutorial (learning-oriented lesson), how-to (goal-oriented steps for a competent user), reference (neutral technical description, structured like the machinery), explanation (understanding-oriented, why/background). Sources: `diataxis.fr/` (home), `diataxis.fr/start-here`, `diataxis.fr/map`, `diataxis.fr/reference`, `diataxis.fr/reference-explanation`. Mapping: `CONTEXT.md` ≈ reference (austere glossary); `docs/adr/` ≈ explanation + decision log (why + consequences); `docs/knowledge/inbox/` ≈ tutorial/explanation drafts; `services/api` OpenAPI + `packages/contracts` ≈ reference. Do not mix them: Diataxis warns that blurring tutorial/how-to and reference/explanation breaks both needs — this is the theoretical basis for "do not pollute CONTEXT.md".
 
-## 2. docs/learning/ promotion and expiry rules
+## 2. docs/knowledge/inbox/ promotion and expiry rules
 
 Problem: a trio learning fintech will accumulate dozens of concept notes (interest math, amortization, payee matching, dashboard metrics). Without rules these leak into `CONTEXT.md` and every agent session.
 
 Rules (enforced by convention + checklist, not new tooling):
 
-1. Every note lives at `docs/learning/YYYY-MM-DD-slug.md` with front-matter: `Status: inbox | promoted | expired`, `Expires: YYYY-MM-DD` (default +90 days), `Promotes to: CONTEXT.md term | docs/adr/NNNN | nothing (drill only)`.
+1. Every note lives at `docs/knowledge/inbox/YYYY-MM-DD-slug.md` with front-matter: `Status: inbox | promoted | expired`, `Expires: YYYY-MM-DD` (default +90 days), `Promotes to: CONTEXT.md term | docs/adr/NNNN | nothing (drill only)`.
 2. Inbox notes are NEVER loaded by default. Agents load a learning note only when its ticket explicitly points at it.
 3. Promotion requires a `grill-with-docs`/`domain-modeling` pass: sharpen the term, check glossary collisions, then either (a) merge one glossary entry into `CONTEXT.md`, or (b) record a decision as a new ADR, then mark the note `Status: promoted` with a link. The note itself is kept (history) but excluded from session grounding.
 4. Expiry is automatic: past `Expires:` with no promotion → `Status: expired`, moved out of the index. No revival by editing; write a new dated note if the topic returns.
-5. Index file `docs/learning/INDEX.md` lists only `inbox` notes (title, expiry, promotes-to). Cap: max ~10 inbox notes; if the cap is hit, the oldest must be promoted or expired before adding. This is the anti-pollution backpressure valve.
+5. Index file `docs/knowledge/inbox/INDEX.md` lists only `inbox` notes (title, expiry, promotes-to). Cap: max ~10 inbox notes; if the cap is hit, the oldest must be promoted or expired before adding. This is the anti-pollution backpressure valve.
 6. Language: English only (see §3), even for Arabic-source concepts; keep the Arabic source as a cited reference link, translate the substance.
 
 This implements the map's "single-context layout + learning record with promotion/expiry rules" note (`.scratch/wellfin-foundation/map.md`, Notes + Context hygiene) via the `ask-matt` route above.
@@ -78,7 +78,7 @@ Minimal load order (keeps sessions inside the smart zone; sessions degrade past 
 3. ADRs touching the area (`docs/adr/` filtered by topic, newest wins on conflict; surface contradictions explicitly per `docs/agents/domain.md`).
 4. The ticket being worked (`issues/NN-*.md`: question, constraints, blocking edges) + the map's Tasks/Out-of-scope lines for scope guard.
 5. Spec pointers the ticket names (V1 12-screen spec slice, ledger invariants) — load the slice, not the whole spec.
-6. `docs/learning/INDEX.md` inbox list only — load a full learning note solely by explicit pointer.
+6. `docs/knowledge/inbox/INDEX.md` inbox list only — load a full learning note solely by explicit pointer.
 
 Explicitly NOT loaded by default: full learning notes, closed-ticket history, full API reference, notebooks, model artifacts. Fetch on demand.
 
@@ -96,7 +96,7 @@ Resulting minimal mono-repo shape (single repo, no meta-build tool in V1; Gradle
 - `services/api/` — FastAPI service (SQLModel models, `/api/v1/*` routes, Alembic migrations, Pytest). Postgres via Docker Compose `db` service in dev.
 - `packages/contracts/` — shared ledger schema + invariants (Pydantic models / JSON Schema / OpenAPI fragment). Single source of truth imported by API tests, Android fake-data builders, and notebook fixtures. Prevents the three tracks drifting on field names.
 - `data-science/notebooks/` (exploration, `*.ipynb` git-stripped or Jupytext-paired) + `data-science/models/` (MLflow-format exports only) + `data-science/fixtures/` (anonymized ledger CSVs with the same columns as `packages/contracts`).
-- `docs/{adr/,learning/}` + `CONTEXT.md` + `AGENTS.md` (+ nested per-tree `AGENTS.md`).
+- `docs/adr/` + `docs/knowledge/` + `CONTEXT.md` + `AGENTS.md` (+ nested per-tree `AGENTS.md`).
 - `.scratch/wellfin-foundation/` — interim map/tickets/research until ticket 06 migrates to GitHub Issues.
 
 Cross-tree coupling rule: `apps/android ↔ services/api` communicate only through versioned HTTP contracts (`/api/v1/*`); `services/api ↔ data-science` communicate only through the model-artifact directory + a stub `POST /v1/inference/categorize` echoing its input schema in V1. No direct imports across trees.
@@ -136,9 +136,10 @@ Recommended tree (create in ticket 06; shown here for decision, not built in thi
 │   ├── adr/
 │   │   ├── 0000-template.md       # Nygard/MADR: Title, Status, Context, Decision, Consequences
 │   │   └── 0001-append-only-ledger.md  # via ticket 04 (example, not decided here)
-│   └── learning/
-│       ├── INDEX.md               # inbox only (max ~10), with Expires + Promotes-to
-│       └── YYYY-MM-DD-slug.md     # dated concept notes (Status/Expires/Promotes-to header)
+│   └── knowledge/
+│       ├── inbox/
+│       │   ├── INDEX.md               # inbox only (max ~10), with Expires + Promotes-to
+│       │   └── YYYY-MM-DD-slug.md     # dated concept notes (Status/Expires/Promotes-to header)
 ├── apps/
 │   └── android/                   # native Kotlin+Compose+Room; single Gradle module in V1
 │       └── AGENTS.md
@@ -169,7 +170,7 @@ Guardrail checklist (every PR / every agent session):
 - [ ] Records in English? (`scripts/check-english-only.sh` green; Arabic only as cited parenthetical)
 - [ ] Glossary terms match `CONTEXT.md`? (no synonym drift; new term → learning note, not silent rename)
 - [ ] ADR added or linked for any hard-to-reverse choice? (Nygard shape, numbered, never rewrite accepted ADRs)
-- [ ] `docs/learning/INDEX.md` inbox ≤ 10, none past `Expires:`?
+- [ ] `docs/knowledge/inbox/INDEX.md` inbox ≤ 10, none past `Expires:`?
 - [ ] Ledger append-only preserved? (no UPDATE/DELETE on entries; corrections are reversing entries; balances derived)
 - [ ] V1 scope kept? (Egypt/EGP/English/manual-entry only; no sync, no iOS, no chatbot advice, no auto-plans)
 - [ ] Adopt-over-build respected? (mature lib used or justification recorded; cross-tree contracts versioned)

@@ -1,4 +1,4 @@
-# Learning inbox
+# Knowledge inbox
 
 Inbox only: at most ~10 notes. A note lives here until it is promoted (merged term into `CONTEXT.md` or recorded as an ADR, then marked `promoted`) or past `Expires:` (marked `expired`). Agents load a full note only when a ticket explicitly points at it.
 

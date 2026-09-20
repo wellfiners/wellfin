@@ -7,8 +7,8 @@ How anyone — graduate trio member, future teammate, or agent-assisted contribu
 - `AGENTS.md` — the agent entry point; every automation rule in this guide is pointed at from there.
 - `docs/agents/` — workflow source of truth: `git-workflow.md` (branches, commits, pushes, identity), `issue-tracker.md` (GitHub operations), `domain.md` + `triage-labels.md` (docs and label conventions).
 - `CONTEXT.md` + `docs/adr/` — the agreed fintech glossary and hard-to-reverse decisions. Read them before touching product code; use glossary terms verbatim.
-- `docs/learning/` — expiring concept notes with an `INDEX.md` inbox (max 10). Staging area for knowledge, not a wiki.
-- `docs/academy/` — the team's fintech school: mission, lessons, learning records (see §7).
+- `docs/knowledge/inbox/` — expiring concept notes with an `INDEX.md` inbox (max 10). Staging area for knowledge, not a wiki.
+- `docs/knowledge/` — the team's domain knowledge: guides, notes (see §7).
 - `.agents/skills/` — automation skills, including `$brief` (human morning brief) and `$wrap` (model-invoked lite close; `docs/agents/personal-status.md` owns STATUS contract).
 - `.sandcastle/` — local-only sandboxed runner (Docker + opencode, lane-safe prompts `implement/plan/review-prompt.md`, `main.mts` fan-out, `.env`/`logs/`/`worktrees/` gitignored). No CI yet.
 - `package.json` — host runner deps (`@ai-hero/sandcastle`, `tsx`). Product code stays stack-agnostic.
@@ -37,7 +37,7 @@ How anyone — graduate trio member, future teammate, or agent-assisted contribu
 - The [foundation map](https://github.com/wellfiners/wellfin/issues/1) is the shared plan: destination, open decision tickets, fog (visible but unscheduled ideas), and out-of-scope boundaries.
 - Take the frontier: open, unblocked, unclaimed child tickets. Claim by assigning yourself **first**, before any work, so parallel sessions skip it.
 - Blocked tickets wait — every blocker listed must be closed first (native GitHub dependencies, `Blocked by` lines as fallback).
-- Learning work lives in mission issues (e.g. academy mission 1). Same claim rule.
+- Learning work lives in guide issues (e.g. knowledge guide 1). Same claim rule.
 
 ## 5. Branches and issues
 
@@ -56,14 +56,15 @@ Three lanes, exactly one at a time: **primary** (`main`, protected), **scoped** 
 
 ## 7. Learning your way up
 
-- The academy (`docs/academy/`) builds human fintech skill: one team mission, bite-size lessons with practice, per-member learning records (`NNNN-slug-name.md`, one insight each — one topic holds many records, corroborate instead of duplicating).
-- Raw jottings stay in `personal/` until shaped; academy entries must tie to the mission and cite `RESOURCES.md`.
-- Records graduate through the inbox: indexed → reviewed → `CONTEXT.md` term or ADR → marked `promoted`, kept forever. Lessons never enter agent context.
+- The knowledge base (`docs/knowledge/`) builds human fintech skill: one team guide, bite-size guides with practice, per-member notes (`NNNN-slug-name.md`, one insight each — one topic holds many notes, corroborate instead of duplicating).
+- Raw jottings stay in `personal/` until shaped; knowledge entries must tie to the guide and cite `RESOURCES.md`.
+- Records graduate through the inbox: indexed → reviewed → `CONTEXT.md` term or ADR → marked `promoted`, kept forever. Guides never enter agent context.
+- Reserved spaces with no files yet: `docs/knowledge/guides/` (guided walkthroughs) and `docs/knowledge/notes/` (promoted notes).
 - The inbox holds at most 10: at full capacity, adding one forces a pick-one triage — you choose which of the 10 gets promoted, merged, or expired first. Nothing is ever silently disposed.
 
 ## 8. Language and libraries
 
-- Talk to agents in any language; **everything recorded in the repo is English** — code, commits, issues, ADRs, glossary, records. Sole exception: human-facing lesson/reference HTML under `docs/academy/` may carry Arabic.
+- Talk to agents in any language; **everything recorded in the repo is English** — code, commits, issues, ADRs, glossary, records. Sole exception: human-facing guide/reference HTML under `docs/knowledge/` may carry Arabic.
 - Prefer mature libraries over building from scratch. When one satisfies the need, adopt it and record the choice; hand-rolling needs a written justification.
 
 ## 9. Review checklist (every PR, every session)
@@ -76,4 +77,4 @@ Three lanes, exactly one at a time: **primary** (`main`, protected), **scoped** 
 
 ## 10. The deal with agents
 
-The setup runs the rails itself — gates, caps, hooks, grounding, promotion drafts. You drive the judgments: mission scope, triage picks, promotion approvals, lesson-worthiness, and every commit Yes. When lost, `$brief` knows where you left off (from `$wrap`'s last stopping point).
+The setup runs the rails itself — gates, caps, hooks, grounding, promotion drafts. You drive the judgments: guide scope, triage picks, promotion approvals, guide-worthiness, and every commit Yes. When lost, `$brief` knows where you left off (from `$wrap`'s last stopping point).

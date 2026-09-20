@@ -6,4 +6,4 @@ This glossary is normative — use these terms verbatim. No domain terms are agr
 
 ## Language
 
-_No terms agreed yet — placeholder to unblock agent grounding. See #2 Sharpen fintech domain glossary and `docs/learning/` inbox._
+_No terms agreed yet — placeholder to unblock agent grounding. See #2 Sharpen fintech domain glossary and `docs/knowledge/inbox/` inbox._
