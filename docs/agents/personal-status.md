@@ -11,7 +11,7 @@ Single source of truth for `.scratch/personal/<user>/STATUS.md` — shape, stamp
 
 ## Building — #<n> <slug>: <state>. Next: <action>. [handoff](.scratch/personal/<user>/handoffs/<slug>.md)
 Updated: <YYYY-MM-DD HH:MM>
-## Learning — mission <n>: <state>. Next: <action>. [handoff](.scratch/personal/<user>/handoffs/<slug>.md)
+## Learning — guide <n>: <state>. Next: <action>. [handoff](.scratch/personal/<user>/handoffs/<slug>.md)
 Updated: <YYYY-MM-DD HH:MM>
 ```
 
