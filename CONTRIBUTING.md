@@ -10,6 +10,8 @@ How anyone — graduate trio member, future teammate, or agent-assisted contribu
 - `docs/learning/` — expiring concept notes with an `INDEX.md` inbox (max 10). Staging area for knowledge, not a wiki.
 - `docs/academy/` — the team's fintech school: mission, lessons, learning records (see §7).
 - `.agents/skills/` — automation skills, including `$brief` (human morning brief) and `$wrap` (model-invoked lite close; `docs/agents/personal-status.md` owns STATUS contract).
+- `.sandcastle/` — local-only sandboxed runner (Docker + opencode, lane-safe prompts `implement/plan/review-prompt.md`, `main.mts` fan-out, `.env`/`logs/`/`worktrees/` gitignored). No CI yet.
+- `package.json` — host runner deps (`@ai-hero/sandcastle`, `tsx`). Product code stays stack-agnostic.
 - `.scratch/` — personal local-only zone. Never pushed, never reviewed.
 
 ## 2. First-day setup
@@ -21,6 +23,7 @@ How anyone — graduate trio member, future teammate, or agent-assisted contribu
    Agents verify this before every commit proposal and stop on anything else.
 3. Read `AGENTS.md`, `docs/agents/git-workflow.md`, and `CONTEXT.md` (or the map #1 when it points somewhere newer).
  4. Say `$brief` to an agent and confirm your `STATUS.md` exists under `.scratch/personal/<you>/` (shape/contract in `docs/agents/personal-status.md`).
+ 5. If you will run sandcastle locally: need Docker 27+ and Node 22 (`docker --version`, `node --version` — already on this host), then `npm install`, copy `.sandcastle/.env.example` → `.sandcastle/.env` and fill `GH_TOKEN` (and `ANTHROPIC_API_KEY` or `CLAUDE_CODE_OAUTH_TOKEN` for opencode). Secrets stay in `.sandcastle/.env` only — repo root `.env` is ignored by the runner.
 
 ## 3. The daily driver — $brief and $wrap
 
@@ -46,7 +49,7 @@ Three lanes, exactly one at a time: **primary** (`main`, protected), **scoped** 
 ## 6. Commits and pull requests
 
 - Messages are conventional commits — `type(scope): imperative lowercase subject` (`feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert`), body for what/why, footer `Part of #NN`. One ticket per commit.
-- Every commit: the agent stages only the ticket's scope, shows diff plus message, and **waits for your explicit Yes** — on any lane, including `main`, where direct commits additionally need separate primary confirmation.
+- Every commit on `main` or a scoped `NN-<slug>` branch: the agent stages only the ticket's scope, shows diff plus message, and **waits for your explicit Yes** (direct `main` needs separate primary confirmation). Commits on `personal/*` are local-only drafts (never pushed) and may auto-commit without waiting — author/hygiene still apply, promotion still needs Yes (see `docs/agents/git-workflow.md:22`).
 - Authorship is human; agent-wholesale content approved unmodified adds `Assisted-by: OpenCode (Muse Spark)`. Real `Co-authored-by` waits for a team bot account — never invent identities.
 - Never commit secrets, `personal/*`, or unrelated scopes together; never `--no-verify`, never amend someone else's commit.
 - Commit approval on a pre-authorized scoped branch carries push approval — push it so review can happen. `personal/*` is never pushed; `main` is never direct-pushed. Land via squash-merge PR from the scoped branch and delete the branch after merge — message composed explicitly with `-t`/`-b`, never the pre-filled default (see `git-workflow.md` § Landing PRs).
